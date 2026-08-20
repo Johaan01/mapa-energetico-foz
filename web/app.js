@@ -164,8 +164,14 @@ async function carregarCidade(map) {
 
   // Subestacoes reais: sempre visiveis, em cidade e em bairro. Sao o unico
   // equipamento eletrico do mapa cuja posicao e verificada, nao estimada.
+  /* Só as de DISTRIBUIÇÃO entram no mapa. Foz do Iguaçu também tem uma conversora
+     HVDC da Furnas (750 kV, que manda energia de Itaipu para São Paulo) e uma de
+     transmissão — ambas reais, mas nenhuma alimenta bairro. Desenhá-las com o mesmo
+     peso das de distribuição sugeria um papel na rede local que elas não têm.
+     O arquivo de dados mantém as 7; aqui filtramos o que faz sentido no modelo. */
   map.addLayer({
     id: "subestacoes-circle", type: "circle", source: "subestacoes",
+    filter: ["==", ["get", "classe"], "distribution"],
     paint: {
       "circle-radius": ["interpolate", ["linear"], ["zoom"],
         10, ["case", ["==", ["get", "classe"], "distribution"], 5, 4],
@@ -181,6 +187,7 @@ async function carregarCidade(map) {
   });
   map.addLayer({
     id: "subestacoes-label", type: "symbol", source: "subestacoes", minzoom: 12.5,
+    filter: ["==", ["get", "classe"], "distribution"],
     layout: {
       "text-field": ["get", "nome"],
       "text-size": 10,
@@ -193,16 +200,16 @@ async function carregarCidade(map) {
 
   map.on("click", "subestacoes-circle", (e) => {
     const p = e.features[0].properties;
-    const rotulo = { distribution: "Distribuição", transmission: "Transmissão", converter: "Conversora" };
     abrirPainel(p.nome, [
-      ["Tipo", rotulo[p.classe] || p.classe],
+      ["Tipo", "Distribuição"],
       ["Operador", p.operador || "—"],
       ["Tensão", p.tensao_v && p.tensao_v !== "nan"
         ? String(p.tensao_v).split(";").map((v) => `${Number(v) / 1000} kV`).join(" / ") : "—"],
       ["Bairros alimentados", p.alimenta_bairros],
     ], null,
       "Posição REAL, do OpenStreetMap (power=substation) — diferente dos transformadores, " +
-      "que são estimados. Só as de distribuição alimentam bairros neste modelo.");
+      "que são estimados. O mapa mostra só as de distribuição: Foz também tem uma " +
+      "conversora da Furnas e uma de transmissão, que não alimentam bairros.");
   });
   map.on("mouseenter", "subestacoes-circle", () => (map.getCanvas().style.cursor = "pointer"));
   map.on("mouseleave", "subestacoes-circle", () => (map.getCanvas().style.cursor = ""));
