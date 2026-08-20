@@ -284,6 +284,76 @@
   border-left-color: var(--olive) !important;
 }
 
+/* ---------- procedência ---------- */
+
+.selo {
+  font-size: 8.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 1px 5px;
+  margin-left: 5px;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.selo-real { background: #2e7d5b; color: #fff; }
+.selo-estimado { background: #a08a2b; color: #fff; }
+.selo-simulado { background: #6b6f96; color: #fff; }
+
+.uc-proc-intro { margin: 0 0 9px 0; font-size: 12px; }
+
+.uc-proc-niveis { display: grid; gap: 6px; margin-bottom: 12px; }
+
+.uc-proc-niveis > div {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  align-items: start;
+  gap: 8px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.uc-proc-niveis .selo { margin-left: 0; justify-self: start; margin-top: 1px; }
+
+.uc-proc-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 12px;
+}
+
+.uc-proc-tabela th {
+  text-align: left;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border);
+  padding: 4px 6px;
+}
+
+.uc-proc-tabela td {
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.45;
+}
+
+.uc-proc-tabela td:first-child { font-weight: 600; width: 26%; }
+.uc-proc-tabela td:last-child { width: 1%; white-space: nowrap; }
+.uc-proc-tabela .selo { margin-left: 0; }
+
+.uc-proc-aviso {
+  font-size: 11.5px;
+  line-height: 1.55;
+  margin: 0;
+  padding: 9px 11px;
+  background: #f4f5f2;
+  border-left: 4px solid var(--olive);
+}
+
 #uc-rodape {
   font-size: 10.5px;
   color: var(--text-muted);

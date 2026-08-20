@@ -32,16 +32,16 @@
   <div id="aviso-acesso"></div>
 
   <div id="kpi-strip">
-    <div class="kpi kpi-est" title="Estimativa: contagem de edificações mapeadas no OpenStreetMap com área ≥ 40 m². Não é o cadastro da Copel — um prédio de apartamentos conta como 1.">
-      <span class="kpi-label">Imóveis modelados <em>est.</em></span><span class="kpi-value" id="kpi-ucs">—</span></div>
-    <div class="kpi" title="Dado real: IBGE, Censo 2022, por bairro.">
-      <span class="kpi-label">População <em>IBGE</em></span><span class="kpi-value" id="kpi-pop">—</span></div>
-    <div class="kpi kpi-est" title="Estimativa: agrupamento de ~30 imóveis por trecho de rua. As posições reais dos transformadores da Copel não são públicas.">
-      <span class="kpi-label">Transformadores <em>est.</em></span><span class="kpi-value" id="kpi-trafos">—</span></div>
-    <div class="kpi kpi-est" title="Quantidade calibrada na taxa real de adesão (ANEEL + IBGE), mas QUAIS imóveis têm painel é sorteio — não é detecção.">
-      <span class="kpi-label">Prosumidores <em>est.</em></span><span class="kpi-value" id="kpi-pros">—</span></div>
-    <div class="kpi kpi-live" title="Soma das curvas simuladas na hora selecionada. A média por imóvel é calibrada no consumo real da ANEEL (SAMP/Copel).">
-      <span class="kpi-label">Carga na hora <em>sim.</em></span><span class="kpi-value" id="kpi-carga">—</span></div>
+    <div class="kpi kpi-est" title="Estimado: contagem de edificações mapeadas no OpenStreetMap com área ≥ 40 m². Não é o cadastro da Copel — um prédio de apartamentos conta como 1.">
+      <span class="kpi-label">Imóveis modelados <em>estimado</em></span><span class="kpi-value" id="kpi-ucs">—</span></div>
+    <div class="kpi" title="Real: IBGE, Censo 2022, por bairro.">
+      <span class="kpi-label">População <em>real</em></span><span class="kpi-value" id="kpi-pop">—</span></div>
+    <div class="kpi kpi-est" title="Estimado: agrupamento de ~30 imóveis por trecho de rua. As posições reais dos transformadores da Copel não são públicas.">
+      <span class="kpi-label">Transformadores <em>estimado</em></span><span class="kpi-value" id="kpi-trafos">—</span></div>
+    <div class="kpi kpi-sim" title="Simulado: a quantidade respeita a taxa real de adesão (ANEEL + IBGE), mas QUAIS imóveis têm painel é sorteio — não é detecção.">
+      <span class="kpi-label">Prosumidores <em>simulado</em></span><span class="kpi-value" id="kpi-pros">—</span></div>
+    <div class="kpi kpi-sim" title="Simulado: soma das curvas na hora selecionada. A média por imóvel é calibrada no consumo real da ANEEL (SAMP/Copel).">
+      <span class="kpi-label">Carga na hora <em>simulado</em></span><span class="kpi-value" id="kpi-carga">—</span></div>
   </div>
 </header>
 
@@ -175,12 +175,76 @@
       <div id="uc-historico-resumo"></div>
     </section>
 
-    <p id="uc-rodape">
-      Tarifas reais: ANEEL, Componentes Tarifárias 2026 (COPEL-DIS, B1 residencial).
-      Fio B conforme Lei 14.300/2022. A <strong>curva de consumo é simulada</strong> — o formato
-      vem de curvas medidas pela Copel (ANEEL CTR) e o volume da média real por UC (ANEEL SAMP).
-      Não é a medição desta casa.
-    </p>
+    <h2 class="uc-secao">6 · De onde vem cada número</h2>
+
+    <div id="uc-procedencia" class="uc-bloco">
+      <p class="uc-proc-intro">
+        Cada valor nesta página carrega um selo. São três níveis:
+      </p>
+
+      <div class="uc-proc-niveis">
+        <div><b class="selo selo-real">real</b>
+             <span>Medido ou publicado por órgão oficial. Não passou por modelo nenhum.</span></div>
+        <div><b class="selo selo-estimado">estimado</b>
+             <span>Derivado de dado real por um cálculo declarado — por exemplo, aplicar a
+                   tarifa homologada da Copel sobre um consumo.</span></div>
+        <div><b class="selo selo-simulado">simulado</b>
+             <span>Gerado pelo modelo. A <em>média</em> do conjunto é calibrada em medição
+                   real, mas o valor de um imóvel específico não é a medição dele.</span></div>
+      </div>
+
+      <table class="uc-proc-tabela">
+        <tr><th>O quê</th><th>Origem</th><th>Nível</th></tr>
+        <tr><td>Tarifas, TUSD e Fio B</td>
+            <td>ANEEL — Componentes Tarifárias 2026 (REH 3.592/2026, COPEL-DIS, B1 residencial);
+                Fio B a 60 % conforme Lei 14.300/2022</td>
+            <td><b class="selo selo-real">real</b></td></tr>
+        <tr><td>Consumo médio por unidade consumidora</td>
+            <td>ANEEL SAMP — 174,1 kWh/mês residencial na área da Copel</td>
+            <td><b class="selo selo-real">real</b></td></tr>
+        <tr><td>Energia injetada por prosumidor</td>
+            <td>ANEEL SAMP — 353,9 kWh/mês, em 313.341 UCs</td>
+            <td><b class="selo selo-real">real</b></td></tr>
+        <tr><td>Formato da curva de 24 h</td>
+            <td>ANEEL CTR — campanhas de medição das distribuidoras, de 15 em 15 minutos</td>
+            <td><b class="selo selo-real">real</b></td></tr>
+        <tr><td>Irradiância solar de Foz do Iguaçu</td>
+            <td>NASA POWER — céu real, nebulosidade embutida (4,73 kWh/m²/dia)</td>
+            <td><b class="selo selo-real">real</b></td></tr>
+        <tr><td>Área e nº de pavimentos do imóvel</td>
+            <td>OpenStreetMap + Google Open Buildings 2.5D (altura, ±1,5 m)</td>
+            <td><b class="selo selo-real">real</b></td></tr>
+        <tr><td>Conta do mês e comparação com o ano passado</td>
+            <td>tarifa real aplicada sobre o consumo simulado</td>
+            <td><b class="selo selo-estimado">estimado</b></td></tr>
+        <tr><td>Economia possível</td>
+            <td>diferença de tarifa entre ponta e fora-ponta, supondo 35 % da carga da
+                ponta deslocável</td>
+            <td><b class="selo selo-estimado">estimado</b></td></tr>
+        <tr><td>Faixa de potencial e arquétipo</td>
+            <td>calculados da curva deste imóvel, com os mesmos indicadores usados nos
+                perfis medidos da ANEEL</td>
+            <td><b class="selo selo-estimado">estimado</b></td></tr>
+        <tr><td>Curva de consumo deste imóvel</td>
+            <td>formato medido (CTR) × nível real (SAMP) × área real do telhado</td>
+            <td><b class="selo selo-simulado">simulado</b></td></tr>
+        <tr><td>Ter ou não geração solar</td>
+            <td>sorteio ponderado por área; o <em>total</em> respeita a taxa real de
+                adesão (23,3 %), mas quais imóveis é sorteio</td>
+            <td><b class="selo selo-simulado">simulado</b></td></tr>
+        <tr><td>Redução de 6 % por mudança de hábito</td>
+            <td>premissa da demonstração — não há cliente real medido</td>
+            <td><b class="selo selo-simulado">simulado</b></td></tr>
+      </table>
+
+      <p class="uc-proc-aviso">
+        <strong>O que esta página não é.</strong> Não é a fatura desta casa nem a leitura
+        do medidor dela. O dado individual de consumo é protegido por LGPD e a Copel não
+        o publica. O que se afirma é mais modesto e verificável: um imóvel com esta área,
+        neste bairro, com este perfil de curva, teria uma conta desta ordem sob a tarifa
+        vigente.
+      </p>
+    </div>
   </div>
 </section>
 

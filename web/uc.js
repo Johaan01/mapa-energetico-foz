@@ -265,9 +265,25 @@ const UC = (() => {
 
   /* ---------- render ---------- */
 
-  function cartao(rotulo, valor, nota, classe = "") {
+  /* Procedência: três níveis, usados igual em toda a interface.
+       real     — medido ou publicado por órgão oficial (IBGE, ANEEL, OSM, NASA)
+       estimado — derivado de dado real por um cálculo declarado
+       simulado — gerado pelo modelo, com a média calibrada em dado real
+     Cada valor mostrado carrega o seu, para que ninguém precise adivinhar. */
+  const PROCEDENCIA = {
+    real: { rotulo: "real", titulo: "Medido ou publicado por órgão oficial." },
+    estimado: { rotulo: "estimado", titulo: "Derivado de dado real por cálculo declarado." },
+    simulado: { rotulo: "simulado", titulo: "Gerado pelo modelo; a média é calibrada em dado real." },
+  };
+
+  function selo(tipo) {
+    const p = PROCEDENCIA[tipo];
+    return p ? `<b class="selo selo-${tipo}" title="${p.titulo}">${p.rotulo}</b>` : "";
+  }
+
+  function cartao(rotulo, valor, nota, classe = "", fonte = "") {
     return `<div class="uc-card ${classe}">
-      <span class="uc-card-rot">${rotulo}</span>
+      <span class="uc-card-rot">${rotulo}${selo(fonte)}</span>
       <span class="uc-card-val">${valor}</span>
       ${nota ? `<span class="uc-card-nota">${nota}</span>` : ""}
     </div>`;
@@ -368,29 +384,34 @@ const UC = (() => {
 
     document.getElementById("uc-topo").innerHTML = [
       cartao("Conta estimada / mês", brl(conv.total),
-             `${num(consumoMes)} kWh consumidos`, "uc-neutro"),
+             `${num(consumoMes)} kWh · tarifa real da Copel sobre consumo simulado`,
+             "uc-neutro", "estimado"),
       passado
         ? cartao("No mesmo mês do ano passado", brl(passado.total),
                  `mesma energia, tarifa de ${passado.vigencia.inicio.slice(0, 7)} — ` +
-                 `diferença de ${brl(conv.total - passado.total)} vem do reajuste`, "uc-alerta")
+                 `diferença de ${brl(conv.total - passado.total)} vem do reajuste`,
+                 "uc-alerta", "estimado")
         : "",
       cartao("Se fosse tarifa branca", brl(branca.total),
              branca.total < conv.total
                ? `seria ${brl(conv.total - branca.total)} mais barata`
-               : `seria ${brl(branca.total - conv.total)} mais cara neste perfil`),
+               : `seria ${brl(branca.total - conv.total)} mais cara neste perfil`,
+             "", "estimado"),
       cartao("Economia possível / mês", brl(economia),
-             `deslocando ${num(desloc.deslocavel, 1)} kWh para fora da ponta`, "uc-bom"),
+             `deslocando ${num(desloc.deslocavel, 1)} kWh para fora da ponta`,
+             "uc-bom", "estimado"),
     ].join("");
 
     // Geração e Fio B ficam junto de "onde foi a energia", que é o assunto deles.
     document.getElementById("uc-secundario").innerHTML = ehProsumidor
       ? cartao("Sol usado na hora", `${num(autoPct)}%`,
-               `de ${num(geracaoMes)} kWh gerados no mês`) +
+               `de ${num(geracaoMes)} kWh gerados no mês`, "", "simulado") +
         cartao("Fio B pago", brl(conv.custoFioB),
-               `${num(tarifas.fio_b_percentual * 100)}% em ${tarifas.ano_fio_b} (Lei 14.300)`)
+               `${num(tarifas.fio_b_percentual * 100)}% em ${tarifas.ano_fio_b} (Lei 14.300)`,
+               "", "estimado")
       : cartao("Geração própria", "não tem",
-               "todo o consumo vem da rede") +
-        cartao("Fio B pago", "R$ 0,00", "só incide sobre energia injetada");
+               "todo o consumo vem da rede", "", "simulado") +
+        cartao("Fio B pago", "R$ 0,00", "só incide sobre energia injetada", "", "real");
 
     // Seção 2: o perfil e a faixa, explicados — não só um selo no cabeçalho.
     const faixaTexto = {

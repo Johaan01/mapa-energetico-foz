@@ -104,8 +104,11 @@ body { display: flex; flex-direction: column; }
 
 .kpi-live { background: #4a5c6e; }
 
-/* Estimativa vs medido: quem olha o painel precisa saber a diferenca de relance. */
-.kpi-est { background: #7c7f4a; }
+/* Procedência à vista: as três cores são as mesmas usadas nos selos do painel da
+   unidade consumidora, para não haver dois vocabulários na mesma plataforma.
+   verde-oliva = real · dourado = estimado · roxo-acinzentado = simulado */
+.kpi-est { background: #a08a2b; }
+.kpi-sim { background: #6b6f96; }
 .kpi-label em {
   font-style: normal;
   opacity: 0.75;
