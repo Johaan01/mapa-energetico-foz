@@ -47,15 +47,20 @@ body { display: flex; flex-direction: column; }
 
 #controles-topo { display: flex; align-items: center; gap: 8px; }
 
+/* Seletor de acesso destacado: é o controle que demonstra a proteção de dados, e
+   um avaliador que não o perceba perde o ponto central da plataforma. */
 #perfil-wrap {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-size: 9.5px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  color: #b7c4cf;
+  color: #dbe6ef;
   white-space: nowrap;
+  background: #24455f;
+  border: 1px solid var(--olive);
+  padding: 3px 4px 3px 8px;
 }
 
 #bairro-select, #perfil-select {

@@ -52,7 +52,9 @@ const PERFIS_ACESSO = {
     rotulo: "Distribuidora (Copel)",
     imoveis: true,
     aviso: "Acesso da detentora do dado: visão imóvel a imóvel para operação e " +
-           "planejamento da rede.",
+           "planejamento da rede. Troque o nível de acesso acima para ver o que " +
+           "cada perfil enxerga — no acesso público, nenhum imóvel aparece " +
+           "individualmente.",
   },
   comercializadora: {
     rotulo: "Comercializadora",
@@ -69,7 +71,10 @@ const state = {
   escalas: {},
   slug: null,
   modo: "cidade",
-  perfil: "publico",
+  // Abre na visão da distribuidora, com tudo visível. Numa demonstração avaliada por
+  // terceiros, começar no nível protegido esconderia justamente o que há para mostrar,
+  // e dependeria de o avaliador descobrir sozinho o seletor de acesso.
+  perfil: "distribuidora",
   modoCor: "carga",
   minhaUC: null,
 };
