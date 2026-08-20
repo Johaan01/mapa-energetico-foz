@@ -7,6 +7,7 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="uc.css">
+<link rel="stylesheet" href="entenda.css">
 </head>
 <body>
 
@@ -17,6 +18,7 @@
       <span id="title-sub">Foz do Iguaçu · PR</span>
     </div>
     <div id="controles-topo">
+      <button id="btn-entenda" title="O que é tarifa branca, Fio B, consumidor tipo — e de onde vêm os dados">Entenda</button>
       <label id="perfil-wrap">
         <span>Acesso</span>
         <select id="perfil-select" aria-label="Nível de acesso">
@@ -248,8 +250,44 @@
   </div>
 </section>
 
+<!-- Tela 3: contexto para quem não é do setor elétrico -->
+<section id="entenda-tela" hidden>
+  <header id="ent-cabecalho">
+    <button id="ent-voltar">◂&nbsp; Voltar ao mapa</button>
+    <div>
+      <h1>Entenda</h1>
+      <p>Como funciona a conta de luz, o que são os perfis da ANEEL e de onde vêm estes dados</p>
+    </div>
+  </header>
+
+  <div id="ent-corpo">
+    <h2 class="ent-secao">Foz do Iguaçu em números</h2>
+    <div id="ent-cidade" class="ent-numeros"></div>
+
+    <h2 class="ent-secao">Os perfis de consumo da ANEEL</h2>
+    <p id="ent-perfis-intro" class="ent-texto"></p>
+    <div id="ent-perfis"></div>
+    <p class="ent-nota">
+      <b>Por que isso importa.</b> Duas casas com a mesma conta podem ter potenciais de
+      economia muito diferentes. Quem concentra consumo às 19h tem muito a ganhar mudando
+      horário; quem já consome espalhado ao longo do dia ganha pouco com isso e precisa de
+      eficiência — trocar equipamento, não trocar horário.
+    </p>
+
+    <h2 class="ent-secao">Como funciona a tarifa</h2>
+    <div id="ent-tarifa" class="ent-texto"></div>
+
+    <h2 class="ent-secao">Energia solar e a Lei 14.300</h2>
+    <div id="ent-gd" class="ent-texto"></div>
+
+    <h2 class="ent-secao">De onde vêm os dados</h2>
+    <div id="ent-dados" class="ent-texto"></div>
+  </div>
+</section>
+
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="uc.js"></script>
+<script src="entenda.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
