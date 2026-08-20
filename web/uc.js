@@ -366,7 +366,7 @@ const UC = (() => {
       <span class="uc-tag-arq">${arq.nome}</span>
       <span class="uc-tag-faixa faixa-${arq.faixa}">potencial ${arq.rotuloFaixa}</span>`;
 
-    const topo = [
+    document.getElementById("uc-topo").innerHTML = [
       cartao("Conta estimada / mês", brl(conv.total),
              `${num(consumoMes)} kWh consumidos`, "uc-neutro"),
       passado
@@ -374,25 +374,43 @@ const UC = (() => {
                  `mesma energia, tarifa de ${passado.vigencia.inicio.slice(0, 7)} — ` +
                  `diferença de ${brl(conv.total - passado.total)} vem do reajuste`, "uc-alerta")
         : "",
+      cartao("Se fosse tarifa branca", brl(branca.total),
+             branca.total < conv.total
+               ? `seria ${brl(conv.total - branca.total)} mais barata`
+               : `seria ${brl(branca.total - conv.total)} mais cara neste perfil`),
       cartao("Economia possível / mês", brl(economia),
              `deslocando ${num(desloc.deslocavel, 1)} kWh para fora da ponta`, "uc-bom"),
     ].join("");
-    document.getElementById("uc-topo").innerHTML = topo;
 
-    const secundarios = [
-      ehProsumidor
-        ? cartao("Sol usado na hora", `${num(autoPct)}%`,
-                 `${num(geracaoMes)} kWh gerados no mês`)
-        : cartao("Geração própria", "—", "imóvel sem geração distribuída"),
-      cartao("Fio B pago", brl(conv.custoFioB),
-             ehProsumidor
-               ? `${num(tarifas.fio_b_percentual * 100)}% em ${tarifas.ano_fio_b} (Lei 14.300)`
-               : "só incide sobre energia injetada"),
-      cartao("Tarifa convencional", brl(conv.total), "modalidade atual"),
-      cartao("Se fosse tarifa branca", brl(branca.total),
-             branca.total < conv.total ? "seria mais barata" : "seria mais cara neste perfil"),
-    ].join("");
-    document.getElementById("uc-secundario").innerHTML = secundarios;
+    // Geração e Fio B ficam junto de "onde foi a energia", que é o assunto deles.
+    document.getElementById("uc-secundario").innerHTML = ehProsumidor
+      ? cartao("Sol usado na hora", `${num(autoPct)}%`,
+               `de ${num(geracaoMes)} kWh gerados no mês`) +
+        cartao("Fio B pago", brl(conv.custoFioB),
+               `${num(tarifas.fio_b_percentual * 100)}% em ${tarifas.ano_fio_b} (Lei 14.300)`)
+      : cartao("Geração própria", "não tem",
+               "todo o consumo vem da rede") +
+        cartao("Fio B pago", "R$ 0,00", "só incide sobre energia injetada");
+
+    // Seção 2: o perfil e a faixa, explicados — não só um selo no cabeçalho.
+    const faixaTexto = {
+      alta: "Boa parte do seu consumo cai no horário caro, então há bastante a ganhar deslocando hábitos.",
+      media: "Parte do consumo cai no horário caro; há ganho moderado em deslocar hábitos.",
+      baixa: "Você já consome pouco no horário caro. O ganho aqui vem de eficiência (troca de equipamento), não de deslocar horário.",
+    }[arq.faixa];
+
+    document.getElementById("uc-perfil-bloco").innerHTML = `
+      <div class="uc-perfil-grid">
+        <div><span>Arquétipo</span><b>${arq.nome}</b>
+             <em>entre os ${ehProsumidor ? "perfis" : "8 perfis residenciais"} medidos pela ANEEL</em></div>
+        <div><span>Consumo na ponta (18h–21h)</span><b>${num(arq.pctPonta, 1)}%</b>
+             <em>quanto maior, mais há a deslocar</em></div>
+        <div><span>Fator de carga</span><b>${num(arq.fatorCarga, 2)}</b>
+             <em>perto de 1 = consumo espalhado; perto de 0 = concentrado</em></div>
+        <div class="uc-perfil-faixa faixa-${arq.faixa}">
+             <span>Faixa de potencial</span><b>${arq.rotuloFaixa.toUpperCase()}</b>
+             <em>${faixaTexto}</em></div>
+      </div>`;
 
     const melhorBranca = branca.total < conv.total;
     document.getElementById("uc-recado-texto").innerHTML = `

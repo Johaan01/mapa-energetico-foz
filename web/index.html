@@ -61,6 +61,16 @@
       <div id="escala-faixa"></div>
       <div id="escala-valores"></div>
       <div class="escala-nota" id="escala-nota"></div>
+
+      <div id="filtro-bloco">
+        <div class="escala-titulo">Mostrar no mapa</div>
+        <label><input type="checkbox" data-filtro="residencial" checked><i style="background:#8c9ec4"></i>Consumidor</label>
+        <label><input type="checkbox" data-filtro="prosumidor" checked><i style="background:#d9a520"></i>Prosumidor</label>
+        <label><input type="checkbox" data-filtro="comercial" checked><i style="background:#7a5ea8"></i>Comercial</label>
+        <label class="filtro-destaque"><input type="checkbox" id="filtro-potencial">
+          <span>Só de <strong>alto potencial</strong></span></label>
+        <div class="filtro-contagem" id="filtro-contagem"></div>
+      </div>
       <div id="escala-simbolos">
         <span><i class="sim-solar"></i>tem painel solar</span>
         <span><i class="sim-trafo"></i>transformador <em>est.</em></span>
@@ -120,14 +130,18 @@
   </header>
 
   <div id="uc-corpo">
+    <h2 class="uc-secao">1 · Sua conta</h2>
     <div id="uc-topo" class="uc-linha"></div>
-    <div id="uc-secundario" class="uc-linha"></div>
 
     <div id="uc-recado">
       <h2>O que os seus dados dizem</h2>
       <p id="uc-recado-texto"></p>
     </div>
 
+    <h2 class="uc-secao">2 · Seu perfil de consumo</h2>
+    <div id="uc-perfil-bloco" class="uc-bloco"></div>
+
+    <h2 class="uc-secao">3 · Sua energia ao longo do dia</h2>
     <div id="uc-graficos">
       <section class="uc-bloco">
         <h2>Curva do dia</h2>
@@ -142,10 +156,14 @@
       <section class="uc-bloco">
         <h2>Onde foi a energia</h2>
         <div id="uc-barra-sol"></div>
-        <h2 style="margin-top:16px">O que fazer</h2>
-        <ul id="uc-acoes"></ul>
+        <div id="uc-secundario" class="uc-mini-linha"></div>
       </section>
     </div>
+
+    <h2 class="uc-secao">4 · O que fazer</h2>
+    <div class="uc-bloco"><ul id="uc-acoes"></ul></div>
+
+    <h2 class="uc-secao">5 · Histórico e como cobramos</h2>
 
     <section id="uc-historico" class="uc-bloco" hidden>
       <h2>12 meses · este ano contra o ano passado</h2>

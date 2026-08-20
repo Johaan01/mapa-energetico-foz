@@ -69,6 +69,62 @@
   margin: 0 auto;
 }
 
+/* Numeração das seções: a página estava com informação solta e sem hierarquia,
+   então o leitor não sabia por onde começar nem o que se relacionava com o quê. */
+.uc-secao {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--navy);
+  font-weight: 700;
+  margin: 16px 0 7px 0;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--navy);
+}
+
+.uc-secao:first-child { margin-top: 0; }
+
+.uc-perfil-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
+}
+
+.uc-perfil-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: #f7f8f6;
+  border-left: 3px solid var(--border);
+}
+
+.uc-perfil-grid span {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+}
+
+.uc-perfil-grid b { font-size: 17px; line-height: 1.2; }
+.uc-perfil-grid em { font-style: normal; font-size: 10.5px; color: var(--text-muted); line-height: 1.4; }
+
+.uc-perfil-faixa.faixa-alta { border-left-color: #2e7d5b; background: #eef4f0; }
+.uc-perfil-faixa.faixa-alta b { color: #2e7d5b; }
+.uc-perfil-faixa.faixa-media { border-left-color: #a08a2b; background: #f6f3e8; }
+.uc-perfil-faixa.faixa-media b { color: #8a761f; }
+.uc-perfil-faixa.faixa-baixa { border-left-color: #7d868f; }
+.uc-perfil-faixa.faixa-baixa b { color: #5a6570; }
+
+.uc-mini-linha {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.uc-mini-linha .uc-card-val { font-size: 17px; }
+
 .uc-linha {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));

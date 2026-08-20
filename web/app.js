@@ -302,7 +302,12 @@ function aplicarPerfilAcesso(map) {
   const aviso = document.getElementById("aviso-acesso");
   aviso.textContent = perfil.aviso;
   aviso.className = state.perfil === "distribuidora" ? "aviso-restrito" : "";
+
+  // O filtro só faz sentido onde há imóveis desenhados.
+  document.getElementById("filtro-bloco").hidden = !(state.modo === "bairro" && podeVerImoveis);
+
   atualizarEscala();
+  aplicarFiltros(map);
 }
 
 function alternarModo(map, modo) {
@@ -374,6 +379,7 @@ async function carregarBairro(map, slug) {
     aplicarHora(state.dados[nome], state.hora);
   }
   for (const f of ramais.features) f.properties.carga_pico_kwh = Math.max(...f.properties.carga_kwh);
+  classificarPotencial(buildings);
 
   preencherKpis(meta);
   desenhar(map);
@@ -633,6 +639,60 @@ function ligarInteracoes(map) {
   });
 }
 
+/* ---------- potencial de economia por imóvel ----------
+   O que define o potencial não é o tamanho da conta, e sim quanto do consumo cai no
+   horário de ponta — quem já consome fora dela tem pouco a deslocar por mais que
+   gaste. Mesmo critério de pipeline/perfis_consumidor.py, aplicado aqui a cada imóvel.
+   Calculado no cliente para não exigir reprocessar os 37 bairros. */
+const HORAS_PONTA = [18, 19, 20];
+
+function classificarPotencial(geojson) {
+  for (const f of geojson.features) {
+    const p = f.properties;
+    const carga = p.carga_kwh;
+    if (!Array.isArray(carga) || !p.e_domicilio) {
+      p.faixa_potencial = "nenhum";
+      continue;
+    }
+    const comprado = carga.map((v) => Math.max(v, 0));
+    const total = comprado.reduce((a, b) => a + b, 0);
+    const ponta = HORAS_PONTA.reduce((a, h) => a + comprado[h], 0);
+    const pct = total > 0 ? (ponta / total) * 100 : 0;
+    p.pct_ponta = Math.round(pct * 10) / 10;
+    p.faixa_potencial = pct >= 22 ? "alto" : pct >= 14 ? "medio" : "baixo";
+  }
+}
+
+function aplicarFiltros(map) {
+  if (!map.getLayer("buildings-fill")) return;
+
+  const perfisAtivos = [...document.querySelectorAll("#filtro-bloco input[data-filtro]")]
+    .filter((c) => c.checked).map((c) => c.dataset.filtro);
+  const soAlto = document.getElementById("filtro-potencial").checked;
+
+  const condicoes = [["in", ["get", "perfil"], ["literal", perfisAtivos]]];
+  if (soAlto) condicoes.push(["==", ["get", "faixa_potencial"], "alto"]);
+  const filtro = ["all", ...condicoes];
+
+  for (const id of ["buildings-fill", "buildings-line"]) {
+    if (map.getLayer(id)) map.setFilter(id, filtro);
+  }
+  if (map.getLayer("buildings-solar")) {
+    map.setFilter("buildings-solar",
+      ["all", ["==", ["get", "perfil"], "prosumidor"], ...condicoes]);
+  }
+
+  const feats = state.dados?.buildings?.features || [];
+  const visiveis = feats.filter((f) =>
+    perfisAtivos.includes(f.properties.perfil) &&
+    (!soAlto || f.properties.faixa_potencial === "alto")).length;
+  const total = feats.filter((f) => f.properties.e_domicilio).length;
+
+  document.getElementById("filtro-contagem").innerHTML = total
+    ? `<strong>${fmt(visiveis)}</strong> de ${fmt(total)} imóveis`
+    : "";
+}
+
 /* ---------- contexto municipal (dado 100% real) ---------- */
 
 function renderContextoMunicipal(m) {
@@ -719,6 +779,15 @@ function desenharBarras(canvas, porAno) {
 }
 
 /* ---------- painel ---------- */
+
+/* O contexto do município é a tela de descanso do painel: sempre que o usuário sai de
+   um item (imóvel, trafo, trecho), volta para cá. Antes o painel ficava preso no
+   último clique, e os dados gerais de Foz sumiam sem jeito óbvio de recuperar. */
+function voltarAoContexto() {
+  document.getElementById("panel-content").hidden = true;
+  document.getElementById("panel-empty").hidden = false;
+  state.curvaPainel = null;
+}
 
 function abrirPainel(titulo, linhas, curva, nota) {
   document.getElementById("panel").classList.remove("collapsed");
@@ -882,6 +951,10 @@ async function main() {
     });
   }
 
+  for (const c of document.querySelectorAll("#filtro-bloco input")) {
+    c.addEventListener("change", () => aplicarFiltros(map));
+  }
+
   const escala = document.getElementById("escala");
   document.getElementById("escala-toggle").addEventListener("click", () => {
     escala.classList.toggle("recolhida");
@@ -917,12 +990,11 @@ async function main() {
   document.getElementById("panel-toggle").addEventListener("click", () =>
     document.getElementById("panel").classList.toggle("collapsed")
   );
-  document.getElementById("uc-voltar").addEventListener("click", () => UC.fechar());
-  document.getElementById("panel-back").addEventListener("click", () => {
-    document.getElementById("panel-content").hidden = true;
-    document.getElementById("panel-empty").hidden = false;
-    state.curvaPainel = null;
+  document.getElementById("uc-voltar").addEventListener("click", () => {
+    UC.fechar();
+    voltarAoContexto();   // senão o painel lateral fica preso no último item clicado
   });
+  document.getElementById("panel-back").addEventListener("click", voltarAoContexto);
 }
 
 main();
