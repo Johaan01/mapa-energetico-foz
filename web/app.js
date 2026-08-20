@@ -231,12 +231,39 @@ async function carregarCidade(map) {
   map.on("mouseleave", "cidade-fill", () => (map.getCanvas().style.cursor = ""));
 }
 
-/* Qual bairro está sob o centro da tela. Usa a própria consulta de feições do
-   MapLibre, que já resolve o ponto-em-polígono na camada renderizada. */
+/* Qual bairro está sob o centro da tela.
+   Não dá para usar queryRenderedFeatures aqui: dentro de um bairro a camada da cidade
+   está oculta, e o que não é desenhado não é consultável. Como os contornos já estão
+   em memória, resolvemos o ponto-em-polígono direto neles — funciona nos dois modos. */
+function pontoEmAnel(x, y, anel) {
+  let dentro = false;
+  for (let i = 0, j = anel.length - 1; i < anel.length; j = i++) {
+    const [xi, yi] = anel[i];
+    const [xj, yj] = anel[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
+      dentro = !dentro;
+    }
+  }
+  return dentro;
+}
+
+function pontoEmGeometria(x, y, geom) {
+  // O primeiro anel é o contorno; os demais são buracos.
+  const poligonos = geom.type === "MultiPolygon" ? geom.coordinates : [geom.coordinates];
+  for (const aneis of poligonos) {
+    if (!pontoEmAnel(x, y, aneis[0])) continue;
+    const emBuraco = aneis.slice(1).some((furo) => pontoEmAnel(x, y, furo));
+    if (!emBuraco) return true;
+  }
+  return false;
+}
+
 function bairroNoCentro(map) {
-  const centro = map.project(map.getCenter());
-  const achadas = map.queryRenderedFeatures(centro, { layers: ["cidade-fill"] });
-  return achadas.length ? achadas[0].properties.slug : null;
+  if (!state.cidade) return null;
+  const { lng, lat } = map.getCenter();
+  const achado = state.cidade.bairros.features.find((f) =>
+    pontoEmGeometria(lng, lat, f.geometry));
+  return achado ? achado.properties.slug : null;
 }
 
 const CAMADAS_CIDADE = ["cidade-fill", "cidade-line", "cidade-trafos"];
@@ -680,23 +707,42 @@ function ligarInteracoes(map) {
      imóveis — tinha que descobrir sozinho que precisava usar o seletor. Carregamos um
      bairro por vez, e não os vizinhos: cada um custa alguns MB e a apresentação é no
      celular. */
+  /* Carrega um bairro e, ao terminar, confere se a câmera ainda está sobre ele.
+     Enquanto uma carga corre as demais são ignoradas — mas quem arrasta depressa por
+     vários bairros para de mover durante a carga, e sem esta reconferência não haveria
+     novo `moveend` para corrigir: o mapa ficaria num bairro que já não é o do centro. */
+  const entrarEm = (slug) => {
+    state.carregando = true;
+    document.getElementById("bairro-select").value = slug;
+    return carregarBairro(map, slug, false)
+      .then(() => alternarModo(map, "bairro"))
+      .finally(() => {
+        state.carregando = false;
+        if (map.getZoom() < Z_ENTRA_BAIRRO) return;
+        const atual = bairroNoCentro(map);
+        if (atual && atual !== state.slug) entrarEm(atual);
+      });
+  };
+
   map.on("moveend", () => {
+    if (state.carregando) return;
     const zoom = map.getZoom();
 
-    if (state.modo === "cidade" && zoom >= Z_ENTRA_BAIRRO) {
-      const slug = bairroNoCentro(map);
-      if (slug && !state.carregando) {
-        state.carregando = true;
-        const sel = document.getElementById("bairro-select");
-        sel.value = slug;
-        carregarBairro(map, slug, false)
-          .then(() => alternarModo(map, "bairro"))
-          .finally(() => { state.carregando = false; });
+    if (zoom < Z_SAI_BAIRRO) {
+      if (state.modo === "bairro") {
+        document.getElementById("bairro-select").value = "";
+        alternarModo(map, "cidade");
       }
-    } else if (state.modo === "bairro" && zoom < Z_SAI_BAIRRO) {
-      document.getElementById("bairro-select").value = "";
-      alternarModo(map, "cidade");
+      return;
     }
+
+    if (zoom < Z_ENTRA_BAIRRO) return;
+
+    // Acima do limiar: o bairro sob o centro manda, venha-se da cidade ou de outro
+    // bairro. Arrastar para o vizinho troca os dados junto — sem isso, o mapa seguia
+    // mostrando o bairro anterior enquanto a câmera já estava sobre outro.
+    const slug = bairroNoCentro(map);
+    if (slug && slug !== state.slug) entrarEm(slug);
   });
 }
 
