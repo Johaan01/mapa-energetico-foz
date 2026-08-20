@@ -1,0 +1,36 @@
+{
+  "municipio": "Foz do Iguaçu",
+  "uf": "PR",
+  "fonte": "ANEEL — dadosabertos.aneel.gov.br, empreendimento-geracao-distribuida",
+  "populacao_censo2022": 285415,
+  "domicilios_estimados": 101211,
+  "ufv_total": 22957,
+  "ufv_residencial": 20123,
+  "potencia_residencial_mw": 130.01,
+  "potencia_media_residencial_kw": 6.46,
+  "taxa_adesao_residencial": 0.1988,
+  "ufv_por_classe": {
+    "Residencial": 20123,
+    "Comercial": 1856,
+    "Rural": 404,
+    "Industrial": 353,
+    "REBR": 198,
+    "Poder Público": 21,
+    "Serviço Público": 2
+  },
+  "ufv_residencial_por_ano": {
+    "2014": 2,
+    "2015": 10,
+    "2016": 39,
+    "2017": 30,
+    "2018": 93,
+    "2019": 372,
+    "2020": 972,
+    "2021": 1915,
+    "2022": 4039,
+    "2023": 3526,
+    "2024": 3715,
+    "2025": 3932,
+    "2026": 1478
+  }
+}

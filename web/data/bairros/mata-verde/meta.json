@@ -1,0 +1,45 @@
+{
+  "versao_saida": 3,
+  "bairro": "Mata Verde",
+  "slug": "mata-verde",
+  "municipio": "Foz do Iguaçu",
+  "cd_bairro": 4108304032,
+  "area_km2": 4.4696,
+  "populacao_censo2022": 829,
+  "domicilios_estimados_ibge": 294,
+  "construcoes_osm": 350,
+  "unidades_consumidoras": 315,
+  "transformadores": 11,
+  "imoveis_por_trafo": {
+    "min": 16,
+    "mediana": 26,
+    "max": 65
+  },
+  "perfis": {
+    "residencial": 219,
+    "prosumidor": 67,
+    "comercial": 29,
+    "nao_residencial": 35
+  },
+  "taxa_prosumidor_calibrada": 0.233,
+  "com_altura_gee": true,
+  "procedencia": {
+    "real_medido": {
+      "limite_do_bairro": "IBGE — malha de bairros do Censo 2022",
+      "populacao": "IBGE — Censo 2022",
+      "footprints": "OpenStreetMap (contribuidores)",
+      "malha_viaria": "OpenStreetMap (contribuidores)",
+      "altura_das_edificacoes": "Google Open Buildings 2.5D Temporal (±1,5 m)",
+      "subestacao": "Subestação Vila Yolanda — OpenStreetMap (power=substation)",
+      "consumo_medio_por_classe": "ANEEL SAMP 2025 (COPEL-DIS) — área de concessão, não municipal",
+      "taxa_de_adesao_solar": "ANEEL Geração Distribuída + IBGE Censo 2022"
+    },
+    "estimado": {
+      "unidades_consumidoras": "contagem de footprints do OSM com área ≥ 40 m². NÃO é o cadastro da Copel: um prédio de apartamentos conta como 1, e imóveis não mapeados no OSM ficam de fora.",
+      "curvas_de_24h": "sintéticas. A MÉDIA do conjunto é calibrada no consumo real da ANEEL; o formato da curva e a variação entre imóveis são modelados.",
+      "quem_tem_painel_solar": "sorteio ponderado por área, respeitando a taxa real de adesão. Não é detecção — não sabemos quais telhados realmente têm UFV.",
+      "posicao_dos_transformadores": "FICTÍCIA. Agrupamos ~30 imóveis por trecho de rua; os transformadores reais estão em postes específicos, dado que a Copel não publica.",
+      "tracado_da_rede": "plausível, não real. Árvore radial sobre as ruas; o cabeamento da Copel não é público."
+    }
+  }
+}

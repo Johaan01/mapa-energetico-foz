@@ -1,0 +1,57 @@
+{
+ "fonte": "NASA POWER — ALLSKY_SFC_SW_DWN (irradiância global horizontal, céu real)",
+ "local": {
+  "lat": -25.5163,
+  "lon": -54.5854,
+  "cidade": "Foz do Iguaçu"
+ },
+ "periodo": "2023-2024",
+ "observacao": "céu real: a nebulosidade já está embutida na medição por satélite",
+ "estatisticas": {
+  "irradiancia_media_w_m2": 197.02,
+  "hsp_kwh_m2_dia": 4.73,
+  "hora_pico": 11,
+  "horas_com_sol": 13,
+  "amostras": 17544
+ },
+ "hsp_por_mes": {
+  "1": 6.82,
+  "2": 6.08,
+  "3": 5.5,
+  "4": 4.08,
+  "5": 3.19,
+  "6": 3.08,
+  "7": 2.87,
+  "8": 4.09,
+  "9": 4.21,
+  "10": 4.87,
+  "11": 5.64,
+  "12": 6.37
+ },
+ "formato_horario": [
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.10371,
+  0.54399,
+  1.3104,
+  2.09388,
+  2.74513,
+  3.1906,
+  3.36758,
+  3.21949,
+  2.81835,
+  2.2167,
+  1.49364,
+  0.71944,
+  0.17122,
+  0.00585,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ]
+}

@@ -1,0 +1,501 @@
+:root {
+  --navy: #16324a;
+  --olive: #6b7a3d;
+  --bg: #eef0f2;
+  --panel-bg: #ffffff;
+  --border: #ccd1d6;
+  --text: #1a1f24;
+  --text-muted: #5a6570;
+  --font: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+body { display: flex; flex-direction: column; }
+
+/* ---------- header ---------- */
+
+#header {
+  background: var(--navy);
+  color: #fff;
+  padding: 7px 10px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 5;
+}
+
+#title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#title-block { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+#title-main { font-size: 16px; font-weight: 700; letter-spacing: 0.2px; }
+#title-sub { font-size: 11px; color: #b7c4cf; }
+
+#controles-topo { display: flex; align-items: center; gap: 8px; }
+
+#perfil-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #b7c4cf;
+  white-space: nowrap;
+}
+
+#bairro-select, #perfil-select {
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 4px 6px;
+  background: #fff;
+  color: var(--text);
+  border: 1px solid #7d8b97;
+  border-radius: 0;
+  max-width: 210px;
+}
+
+#aviso-acesso {
+  font-size: 10.5px;
+  color: #cfdae4;
+  background: #10263a;
+  border-left: 3px solid var(--olive);
+  padding: 4px 8px;
+  line-height: 1.35;
+}
+
+#aviso-acesso.aviso-restrito { border-left-color: #c25b52; color: #f2ddda; }
+
+#kpi-strip {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.kpi {
+  background: var(--olive);
+  color: #fff;
+  padding: 4px 9px;
+  min-width: 116px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.kpi-live { background: #4a5c6e; }
+
+/* Estimativa vs medido: quem olha o painel precisa saber a diferenca de relance. */
+.kpi-est { background: #7c7f4a; }
+.kpi-label em {
+  font-style: normal;
+  opacity: 0.75;
+  border: 1px solid currentColor;
+  padding: 0 3px;
+  margin-left: 3px;
+  font-size: 8px;
+}
+
+.kpi-label {
+  display: block;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #e6ead9;
+  white-space: nowrap;
+}
+
+.kpi-live .kpi-label { color: #cfdae4; }
+
+.kpi-value { display: block; font-size: 14px; font-weight: 700; margin-top: 1px; white-space: nowrap; }
+
+/* ---------- mapa ---------- */
+
+main { position: relative; flex: 1; min-height: 0; }
+#map { position: absolute; inset: 0; }
+
+#btn-cidade {
+  position: absolute;
+  left: 52px; top: 10px;
+  background: var(--navy);
+  color: #fff;
+  border: 1px solid #3d5567;
+  font-family: var(--font);
+  font-size: 11.5px;
+  padding: 6px 10px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+/* ---------- legenda do mapa ---------- */
+
+#escala {
+  position: absolute;
+  left: 10px; bottom: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--border);
+  z-index: 3;
+  max-width: 240px;
+  font-size: 11px;
+}
+
+#escala-toggle {
+  width: 100%;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  font-family: var(--font);
+  font-size: 10.5px;
+  text-align: left;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+#escala.recolhida #escala-corpo { display: none; }
+
+#escala-corpo { padding: 8px; }
+
+.escala-titulo {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+#escala-faixa {
+  height: 11px;
+  border: 1px solid var(--border);
+  display: flex;
+}
+
+#escala-faixa b { flex: 1; display: block; }
+
+#escala-valores {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: var(--text);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.escala-nota {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin-top: 5px;
+}
+
+.cat-linha {
+  display: grid;
+  grid-template-columns: 12px auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  font-size: 10.5px;
+  color: var(--text);
+}
+
+.cat-linha i {
+  width: 12px; height: 12px;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.cat-linha b { font-weight: 600; }
+.cat-linha span { color: var(--text-muted); font-size: 9.5px; }
+
+.cat-obs {
+  display: block;
+  font-size: 9.5px;
+  color: var(--text-muted);
+  margin-top: 5px;
+  line-height: 1.35;
+}
+
+#escala-simbolos {
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top: 1px dotted var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--text);
+}
+
+#escala-simbolos span { display: flex; align-items: center; gap: 5px; }
+#escala-simbolos em { font-style: normal; color: var(--text-muted); font-size: 9px; }
+
+#escala-simbolos i { width: 12px; height: 12px; flex-shrink: 0; display: inline-block; }
+
+.sim-solar {
+  background: repeating-linear-gradient(45deg, #1a426d 0 2px, rgba(26,66,109,0.2) 2px 4px);
+  border: 1px solid #0f2f4f;
+}
+
+.sim-trafo { background: #d98b84; border: 1.5px solid var(--navy); border-radius: 50%; }
+.sim-sub { background: var(--navy); border: 2px solid #d9b310; border-radius: 50%; }
+
+#zoom-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  background: rgba(22, 50, 74, 0.86);
+  color: #fff;
+  font-size: 10.5px;
+  padding: 4px 10px;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  z-index: 3;
+  white-space: nowrap;
+}
+
+/* ---------- painel ---------- */
+
+#panel {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 272px;
+  background: var(--panel-bg);
+  border-left: 1px solid var(--border);
+  transition: transform 0.2s ease;
+  z-index: 4;
+  display: flex;
+}
+
+#panel.collapsed { transform: translateX(272px); }
+
+#panel-toggle {
+  position: absolute;
+  left: -26px; top: 10px;
+  width: 26px; height: 38px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#panel.collapsed #panel-toggle { transform: scaleX(-1); }
+
+#panel-body { padding: 11px; width: 100%; overflow-y: auto; }
+#panel-empty { font-size: 12px; color: var(--text-muted); line-height: 1.45; }
+
+.panel-h,
+#panel-title {
+  font-size: 13.5px;
+  margin: 0 0 7px 0;
+  border-bottom: 2px solid var(--olive);
+  padding-bottom: 4px;
+}
+
+#panel-table, #muni-table {
+  width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 10px;
+}
+#panel-table td, #muni-table td { padding: 3px 2px; border-bottom: 1px solid var(--border); }
+#panel-table td:first-child, #muni-table td:first-child { color: var(--text-muted); }
+#panel-table td:last-child, #muni-table td:last-child { text-align: right; font-weight: 600; color: var(--text); }
+
+#muni-chart { width: 100%; height: 86px; border: 1px solid var(--border); background: #fbfbfa; }
+
+.perfil-linha {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 5px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+
+.perfil-nome { color: var(--text); }
+.perfil-nome em {
+  font-style: normal;
+  color: var(--text-muted);
+  font-size: 9.5px;
+  margin-left: 5px;
+  border: 1px solid var(--border);
+  padding: 0 4px;
+}
+
+.perfil-num { color: var(--text-muted); font-size: 10px; font-variant-numeric: tabular-nums; }
+
+.perfil-faixa {
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 1px 6px;
+  color: #fff;
+}
+
+.perfil-faixa.faixa-alta { background: #2e7d5b; }
+.perfil-faixa.faixa-media { background: #a08a2b; }
+.perfil-faixa.faixa-baixa { background: #7d868f; }
+
+.panel-note-block {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-top: 8px;
+  padding: 6px 7px;
+  background: #f4f5f2;
+  border-left: 3px solid var(--olive);
+}
+
+.panel-hint {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-top: 10px;
+  padding-top: 7px;
+  border-top: 1px dotted var(--border);
+}
+
+#panel-back {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 10.5px;
+  padding: 0 0 6px 0;
+  cursor: pointer;
+}
+
+#panel-back:hover { color: var(--navy); }
+
+.panel-section {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+#panel-chart { width: 100%; height: 96px; border: 1px solid var(--border); background: #fbfbfa; }
+
+#panel-note {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top: 1px dotted var(--border);
+}
+
+/* ---------- controles ---------- */
+
+/* Controle de tempo: cartão flutuante sobre o mapa, não barra colada no rodapé.
+   Colado embaixo ele competia com a borda da janela e, no PC, o slider esticado de
+   ponta a ponta ficava desproporcional. */
+#controls {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  background: rgba(22, 50, 74, 0.96);
+  color: #fff;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  z-index: 6;
+  border: 1px solid #35566f;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  width: min(560px, calc(100vw - 32px));
+}
+
+#play-btn {
+  background: var(--olive);
+  color: #fff;
+  border: none;
+  width: 32px; height: 32px;
+  font-size: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+#hour-slider { flex: 1; min-width: 60px; accent-color: var(--olive); }
+
+#hour-label {
+  font-size: 15px;
+  font-weight: 700;
+  width: 54px;
+  flex-shrink: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#hora-dica { font-size: 9.5px; color: #9fb3c4; flex-shrink: 0; }
+
+/* Alternador dentro da legenda: as duas leituras do mapa (carga do momento x perfil
+   fixo) usam escalas de cor incompatíveis, então não podem ser mostradas juntas — o
+   botão precisa deixar óbvio qual está ativa. */
+#modo-cor { display: flex; margin-bottom: 8px; border: 1px solid var(--border); }
+
+#modo-cor button {
+  flex: 1;
+  background: #eceef0;
+  color: var(--text-muted);
+  border: none;
+  font-family: var(--font);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 6px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#modo-cor button + button { border-left: 1px solid var(--border); }
+#modo-cor button.ativo { background: var(--navy); color: #fff; }
+
+#legend-bar {
+  width: 62px; height: 8px;
+  background: linear-gradient(to right, #1f6f8b, #f2f0ec, #a32b22);
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ---------- responsivo ---------- */
+
+@media (min-width: 680px) {
+  .kpi { min-width: 134px; }
+  #bairro-select { max-width: 220px; }
+}
+
+@media (max-width: 679px) {
+  #panel {
+    left: 0; top: auto;
+    height: 47%;
+    width: auto;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+  #panel.collapsed { transform: translateY(100%); }
+  #panel-toggle {
+    left: 50%; top: -24px;
+    transform: translateX(-50%) rotate(90deg);
+    width: 44px; height: 24px;
+  }
+  #panel.collapsed #panel-toggle { transform: translateX(-50%) rotate(-90deg); }
+  #zoom-hint { bottom: auto; top: 8px; }
+
+  /* No celular a legenda sobe para não colidir com o controle de tempo flutuante. */
+  #escala { bottom: 74px; max-width: calc(100vw - 20px); }
+  #hora-dica { display: none; }
+  #controls { bottom: 10px; padding: 7px 10px; }
+}

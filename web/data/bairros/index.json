@@ -1,0 +1,263 @@
+{
+  "bairros": [
+    {
+      "bairro": "Alvorada",
+      "slug": "alvorada",
+      "populacao_censo2022": 2175,
+      "unidades_consumidoras": 136,
+      "transformadores": 5
+    },
+    {
+      "bairro": "América",
+      "slug": "america",
+      "populacao_censo2022": 5306,
+      "unidades_consumidoras": 1422,
+      "transformadores": 56
+    },
+    {
+      "bairro": "Bourbon",
+      "slug": "bourbon",
+      "populacao_censo2022": 4846,
+      "unidades_consumidoras": 1704,
+      "transformadores": 63
+    },
+    {
+      "bairro": "Campos do Iguaçu",
+      "slug": "campos-do-iguacu",
+      "populacao_censo2022": 14790,
+      "unidades_consumidoras": 4798,
+      "transformadores": 181
+    },
+    {
+      "bairro": "Carimã",
+      "slug": "carima",
+      "populacao_censo2022": 5290,
+      "unidades_consumidoras": 1911,
+      "transformadores": 70
+    },
+    {
+      "bairro": "Cataratas",
+      "slug": "cataratas",
+      "populacao_censo2022": 869,
+      "unidades_consumidoras": 671,
+      "transformadores": 26
+    },
+    {
+      "bairro": "Centro",
+      "slug": "centro",
+      "populacao_censo2022": 13891,
+      "unidades_consumidoras": 2714,
+      "transformadores": 107
+    },
+    {
+      "bairro": "Centro Cívico",
+      "slug": "centro-civico",
+      "populacao_censo2022": 1773,
+      "unidades_consumidoras": 391,
+      "transformadores": 16
+    },
+    {
+      "bairro": "Cidade Nova",
+      "slug": "cidade-nova",
+      "populacao_censo2022": 8665,
+      "unidades_consumidoras": 2026,
+      "transformadores": 79
+    },
+    {
+      "bairro": "Cognópolis",
+      "slug": "cognopolis",
+      "populacao_censo2022": 900,
+      "unidades_consumidoras": 386,
+      "transformadores": 12
+    },
+    {
+      "bairro": "Ipê",
+      "slug": "ipe",
+      "populacao_censo2022": 11567,
+      "unidades_consumidoras": 2808,
+      "transformadores": 101
+    },
+    {
+      "bairro": "Itaipu A",
+      "slug": "itaipu-a",
+      "populacao_censo2022": 5616,
+      "unidades_consumidoras": 2099,
+      "transformadores": 87
+    },
+    {
+      "bairro": "Itaipu B",
+      "slug": "itaipu-b",
+      "populacao_censo2022": 718,
+      "unidades_consumidoras": 308,
+      "transformadores": 11
+    },
+    {
+      "bairro": "Itaipu Binacional",
+      "slug": "itaipu-binacional",
+      "populacao_censo2022": null,
+      "unidades_consumidoras": 42,
+      "transformadores": 2
+    },
+    {
+      "bairro": "Itaipu C",
+      "slug": "itaipu-c",
+      "populacao_censo2022": 12066,
+      "unidades_consumidoras": 2410,
+      "transformadores": 96
+    },
+    {
+      "bairro": "KLP",
+      "slug": "klp",
+      "populacao_censo2022": 7528,
+      "unidades_consumidoras": 2796,
+      "transformadores": 108
+    },
+    {
+      "bairro": "Lancaster",
+      "slug": "lancaster",
+      "populacao_censo2022": 11916,
+      "unidades_consumidoras": 3359,
+      "transformadores": 128
+    },
+    {
+      "bairro": "Lote Grande",
+      "slug": "lote-grande",
+      "populacao_censo2022": 734,
+      "unidades_consumidoras": 300,
+      "transformadores": 12
+    },
+    {
+      "bairro": "Maracanã",
+      "slug": "maracana",
+      "populacao_censo2022": 9018,
+      "unidades_consumidoras": 2334,
+      "transformadores": 92
+    },
+    {
+      "bairro": "Mata Verde",
+      "slug": "mata-verde",
+      "populacao_censo2022": 829,
+      "unidades_consumidoras": 315,
+      "transformadores": 11
+    },
+    {
+      "bairro": "Monjolo",
+      "slug": "monjolo",
+      "populacao_censo2022": 3503,
+      "unidades_consumidoras": 876,
+      "transformadores": 29
+    },
+    {
+      "bairro": "Morumbi",
+      "slug": "morumbi",
+      "populacao_censo2022": 33701,
+      "unidades_consumidoras": 9128,
+      "transformadores": 348
+    },
+    {
+      "bairro": "Náutica",
+      "slug": "nautica",
+      "populacao_censo2022": 1305,
+      "unidades_consumidoras": 481,
+      "transformadores": 19
+    },
+    {
+      "bairro": "Panorama",
+      "slug": "panorama",
+      "populacao_censo2022": 15742,
+      "unidades_consumidoras": 4895,
+      "transformadores": 177
+    },
+    {
+      "bairro": "Parque Nacional",
+      "slug": "parque-nacional",
+      "populacao_censo2022": 26,
+      "unidades_consumidoras": 23,
+      "transformadores": 1
+    },
+    {
+      "bairro": "Polo Centro",
+      "slug": "polo-centro",
+      "populacao_censo2022": 2587,
+      "unidades_consumidoras": 500,
+      "transformadores": 18
+    },
+    {
+      "bairro": "Polo Universitário",
+      "slug": "polo-universitario",
+      "populacao_censo2022": 5966,
+      "unidades_consumidoras": 1476,
+      "transformadores": 59
+    },
+    {
+      "bairro": "Portal",
+      "slug": "portal",
+      "populacao_censo2022": 9066,
+      "unidades_consumidoras": 2122,
+      "transformadores": 83
+    },
+    {
+      "bairro": "Portes",
+      "slug": "portes",
+      "populacao_censo2022": 3964,
+      "unidades_consumidoras": 1254,
+      "transformadores": 52
+    },
+    {
+      "bairro": "Porto Belo",
+      "slug": "porto-belo",
+      "populacao_censo2022": 10005,
+      "unidades_consumidoras": 2171,
+      "transformadores": 79
+    },
+    {
+      "bairro": "Porto Meira",
+      "slug": "porto-meira",
+      "populacao_censo2022": 25449,
+      "unidades_consumidoras": 7395,
+      "transformadores": 265
+    },
+    {
+      "bairro": "Remanso",
+      "slug": "remanso",
+      "populacao_censo2022": 461,
+      "unidades_consumidoras": 286,
+      "transformadores": 11
+    },
+    {
+      "bairro": "São Roque",
+      "slug": "sao-roque",
+      "populacao_censo2022": 4815,
+      "unidades_consumidoras": 1451,
+      "transformadores": 52
+    },
+    {
+      "bairro": "Três Bandeiras",
+      "slug": "tres-bandeiras",
+      "populacao_censo2022": 10500,
+      "unidades_consumidoras": 3046,
+      "transformadores": 117
+    },
+    {
+      "bairro": "Três Fronteiras",
+      "slug": "tres-fronteiras",
+      "populacao_censo2022": 5911,
+      "unidades_consumidoras": 1476,
+      "transformadores": 60
+    },
+    {
+      "bairro": "Três Lagoas",
+      "slug": "tres-lagoas",
+      "populacao_censo2022": 27468,
+      "unidades_consumidoras": 6927,
+      "transformadores": 255
+    },
+    {
+      "bairro": "Yolanda",
+      "slug": "yolanda",
+      "populacao_censo2022": 4721,
+      "unidades_consumidoras": 1689,
+      "transformadores": 63
+    }
+  ]
+}

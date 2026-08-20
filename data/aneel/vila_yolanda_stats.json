@@ -1,0 +1,26 @@
+{
+  "bairro": "Vila Yolanda",
+  "municipio": "Foz do Iguaçu",
+  "uf": "PR",
+  "cep_prefix": "85853",
+  "observacao_cep": "Prefixo de 5 digitos; os 3 digitos finais do CEP sao mascarados pela ANEEL, entao a zona pode extrapolar levemente o perimetro exato do bairro.",
+  "fonte": "ANEEL - dadosabertos.aneel.gov.br - empreendimento-geracao-distribuida.csv",
+  "registros_residenciais_ufv": 1364,
+  "potencia_instalada_total_kw": 10580.5,
+  "potencia_media_kw": 7.76,
+  "registros_por_ano_atualizacao_cadastral": {
+    "2014": 1,
+    "2015": 4,
+    "2016": 14,
+    "2017": 5,
+    "2018": 10,
+    "2019": 29,
+    "2020": 56,
+    "2021": 147,
+    "2022": 294,
+    "2023": 260,
+    "2024": 230,
+    "2025": 248,
+    "2026": 66
+  }
+}

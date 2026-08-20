@@ -1,0 +1,32 @@
+# Dados brutos baixados das fontes oficiais.
+# NUNCA versionar: somam ~1,8 GB (um CSV da ANEEL sozinho tem 1,46 GB).
+# O recorte de Foz do Iguaçu / COPEL-DIS (data/recorte/, 7,4 MB) VAI para o
+# repositório — é ele que mantém o projeto reproduzível sem rebaixar tudo.
+# Gerado por: python pipeline/enxugar_dados.py
+data/aneel/*.csv
+data/aneel/*.zip
+data/aneel/*.parquet
+data/gee/cache/
+data/osm_cache/
+data/ibge/*.zip
+data/ibge/*.xlsx
+data/ibge/PR_bairros/
+
+# Pipeline v1, arquivado por referência histórica — não precisa ir para o repositório.
+_legado_v1/
+
+# Cache HTTP do osmnx (ox.settings.use_cache): ~89 MB de respostas da Overpass,
+# recriado sozinho na próxima execução.
+pipeline/cache/
+
+# Saída de desenvolvimento (screenshots regeneráveis).
+dev/saida/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Logs de execução
+pipeline/*.log

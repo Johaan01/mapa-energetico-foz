@@ -1,0 +1,41 @@
+# Publica a pasta web/ no GitHub Pages a cada push na branch principal.
+#
+# Por que via Action e não "Pages a partir de uma pasta": o Pages só aceita a raiz do
+# repositório ou /docs como origem, e nossa aplicação vive em web/ (docs/ guarda a
+# documentação). A Action publica web/ como se fosse a raiz do site.
+name: Publicar no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # permite publicar manualmente pelo botão na aba Actions
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Uma publicação por vez; se houver push novo durante uma publicação, espera terminar.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - name: Empacotar a pasta web/
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./web
+
+      - name: Publicar
+        id: deploy
+        uses: actions/deploy-pages@v4

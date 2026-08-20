@@ -1,0 +1,41 @@
+{
+  "fonte": "ANEEL SAMP 2025 — mercado declarado pelas distribuidoras (Res. Normativa 1.003/2022)",
+  "distribuidora": "COPEL-DIS",
+  "metrica_energia": "Energia TE (kWh)",
+  "ressalva": "Valores da area de concessao da Copel inteira; o SAMP nao tem recorte municipal.",
+  "por_classe": [
+    {
+      "classe": "Residencial",
+      "meses": 12,
+      "ucs_medias": 4356177,
+      "kwh_mes_total_medio": 758028775,
+      "kwh_mes_por_uc": 174.1,
+      "kwh_dia_por_uc": 5.73
+    },
+    {
+      "classe": "Comercial",
+      "meses": 12,
+      "ucs_medias": 450289,
+      "kwh_mes_total_medio": 261984028,
+      "kwh_mes_por_uc": 582.2,
+      "kwh_dia_por_uc": 19.15
+    },
+    {
+      "classe": "Industrial",
+      "meses": 12,
+      "ucs_medias": 59135,
+      "kwh_mes_total_medio": 82388608,
+      "kwh_mes_por_uc": 1439.6,
+      "kwh_dia_por_uc": 47.36
+    },
+    {
+      "classe": "Rural",
+      "meses": 12,
+      "ucs_medias": 310229,
+      "kwh_mes_total_medio": 133327135,
+      "kwh_mes_por_uc": 429.4,
+      "kwh_dia_por_uc": 14.13
+    }
+  ],
+  "energia_injetada_residencial_kwh_mes": 110884846
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Rede de Energia — Foz do Iguaçu</title>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="uc.css">
+</head>
+<body>
+
+<header id="header">
+  <div id="title-row">
+    <div id="title-block">
+      <span id="title-main">Rede de Energia</span>
+      <span id="title-sub">Foz do Iguaçu · PR</span>
+    </div>
+    <div id="controles-topo">
+      <label id="perfil-wrap">
+        <span>Acesso</span>
+        <select id="perfil-select" aria-label="Nível de acesso">
+          <option value="publico">Público (livre)</option>
+          <option value="consumidor">Consumidor / prosumidor (sua UC)</option>
+          <option value="distribuidora">Distribuidora (Copel)</option>
+          <option value="comercializadora">Comercializadora</option>
+        </select>
+      </label>
+      <select id="bairro-select" aria-label="Selecionar bairro"></select>
+    </div>
+  </div>
+  <div id="aviso-acesso"></div>
+
+  <div id="kpi-strip">
+    <div class="kpi kpi-est" title="Estimativa: contagem de edificações mapeadas no OpenStreetMap com área ≥ 40 m². Não é o cadastro da Copel — um prédio de apartamentos conta como 1.">
+      <span class="kpi-label">Imóveis modelados <em>est.</em></span><span class="kpi-value" id="kpi-ucs">—</span></div>
+    <div class="kpi" title="Dado real: IBGE, Censo 2022, por bairro.">
+      <span class="kpi-label">População <em>IBGE</em></span><span class="kpi-value" id="kpi-pop">—</span></div>
+    <div class="kpi kpi-est" title="Estimativa: agrupamento de ~30 imóveis por trecho de rua. As posições reais dos transformadores da Copel não são públicas.">
+      <span class="kpi-label">Transformadores <em>est.</em></span><span class="kpi-value" id="kpi-trafos">—</span></div>
+    <div class="kpi kpi-est" title="Quantidade calibrada na taxa real de adesão (ANEEL + IBGE), mas QUAIS imóveis têm painel é sorteio — não é detecção.">
+      <span class="kpi-label">Prosumidores <em>est.</em></span><span class="kpi-value" id="kpi-pros">—</span></div>
+    <div class="kpi kpi-live" title="Soma das curvas simuladas na hora selecionada. A média por imóvel é calibrada no consumo real da ANEEL (SAMP/Copel).">
+      <span class="kpi-label">Carga na hora <em>sim.</em></span><span class="kpi-value" id="kpi-carga">—</span></div>
+  </div>
+</header>
+
+<main>
+  <div id="map"></div>
+
+  <button id="btn-cidade" hidden>◂ Foz do Iguaçu</button>
+
+  <div id="escala">
+    <button id="escala-toggle" aria-label="Mostrar ou esconder a legenda">Legenda ▾</button>
+    <div id="escala-corpo">
+      <div id="modo-cor">
+        <button data-modo="carga" class="ativo">Carga na rede</button>
+        <button data-modo="perfil">Perfil do imóvel</button>
+      </div>
+      <div class="escala-titulo" id="escala-titulo">Carga na rede</div>
+      <div id="escala-faixa"></div>
+      <div id="escala-valores"></div>
+      <div class="escala-nota" id="escala-nota"></div>
+      <div id="escala-simbolos">
+        <span><i class="sim-solar"></i>tem painel solar</span>
+        <span><i class="sim-trafo"></i>transformador <em>est.</em></span>
+        <span><i class="sim-sub"></i>subestação <em>real</em></span>
+      </div>
+    </div>
+  </div>
+  <div id="zoom-hint">Aproxime para ver imóveis e ramais</div>
+
+  <aside id="panel" class="collapsed">
+    <button id="panel-toggle" aria-label="Alternar painel">◂</button>
+    <div id="panel-body">
+      <div id="panel-empty">
+        <h2 class="panel-h">Contexto real — Foz do Iguaçu</h2>
+        <table id="muni-table"></table>
+        <div class="panel-section">Novas instalações solares residenciais / ano</div>
+        <canvas id="muni-chart" width="256" height="86"></canvas>
+        <div class="panel-note-block">
+          Dados abertos da ANEEL (Geração Distribuída) e Censo 2022 do IBGE — números
+          reais, medidos. As curvas de consumo por imóvel no mapa são simuladas a partir
+          desta calibração.
+        </div>
+        <div class="panel-section" style="margin-top:14px">Perfis de consumo medidos</div>
+        <div id="perfis-resumo"></div>
+        <div class="panel-note-block" id="perfis-nota"></div>
+
+        <div class="panel-hint">Toque em um transformador, trecho de rua ou imóvel para ver os detalhes.</div>
+      </div>
+      <div id="panel-content" hidden>
+        <button id="panel-back">◂ contexto do município</button>
+        <h2 id="panel-title">—</h2>
+        <table id="panel-table"></table>
+        <div class="panel-section">Curva de 24 h (kWh)</div>
+        <canvas id="panel-chart" width="256" height="96"></canvas>
+        <div id="panel-note"></div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<div id="controls">
+  <button id="play-btn" aria-label="Reproduzir 24 h">▶</button>
+  <input type="range" id="hour-slider" min="0" max="23" step="1" value="19">
+  <span id="hour-label">19:00</span>
+  <span id="hora-dica">arraste para ver o dia</span>
+</div>
+
+<!-- Tela 2: painel da unidade consumidora -->
+<section id="uc-tela" hidden>
+  <header id="uc-cabecalho">
+    <button id="uc-voltar">◂&nbsp; Voltar ao mapa</button>
+    <div id="uc-identidade">
+      <h1 id="uc-titulo">—</h1>
+      <p id="uc-sub">—</p>
+    </div>
+    <div id="uc-perfil-tag"></div>
+  </header>
+
+  <div id="uc-corpo">
+    <div id="uc-topo" class="uc-linha"></div>
+    <div id="uc-secundario" class="uc-linha"></div>
+
+    <div id="uc-recado">
+      <h2>O que os seus dados dizem</h2>
+      <p id="uc-recado-texto"></p>
+    </div>
+
+    <div id="uc-graficos">
+      <section class="uc-bloco">
+        <h2>Curva do dia</h2>
+        <canvas id="uc-curva" width="620" height="220"></canvas>
+        <p class="uc-legenda">
+          <span><i style="background:#16324a"></i>consumo</span>
+          <span><i style="background:#2e7d5b"></i>geração</span>
+          <span><i style="background:rgba(163,43,34,0.25)"></i>horário de ponta</span>
+        </p>
+      </section>
+
+      <section class="uc-bloco">
+        <h2>Onde foi a energia</h2>
+        <div id="uc-barra-sol"></div>
+        <h2 style="margin-top:16px">O que fazer</h2>
+        <ul id="uc-acoes"></ul>
+      </section>
+    </div>
+
+    <section id="uc-historico" class="uc-bloco" hidden>
+      <h2>12 meses · este ano contra o ano passado</h2>
+      <canvas id="uc-barras-ano" width="900" height="150"></canvas>
+      <p class="uc-legenda">
+        <span><i style="background:#c2c7cc"></i>ano passado</span>
+        <span><i style="background:#16324a"></i>este ano</span>
+      </p>
+      <div id="uc-historico-resumo"></div>
+    </section>
+
+    <p id="uc-rodape">
+      Tarifas reais: ANEEL, Componentes Tarifárias 2026 (COPEL-DIS, B1 residencial).
+      Fio B conforme Lei 14.300/2022. A <strong>curva de consumo é simulada</strong> — o formato
+      vem de curvas medidas pela Copel (ANEEL CTR) e o volume da média real por UC (ANEEL SAMP).
+      Não é a medição desta casa.
+    </p>
+  </div>
+</section>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="uc.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

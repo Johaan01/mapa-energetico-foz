@@ -1,0 +1,65 @@
+{
+  "vigencia_anterior": {
+    "inicio": "2025-06-24",
+    "fim": "2025-12-31",
+    "te": 275.75,
+    "tusd": 366.67
+  },
+  "fonte": "ANEEL — Componentes Tarifárias 2026",
+  "resolucao": "RESOLUÇÃO HOMOLOGATÓRIA Nº 3.592, DE 23 DE JUNHO DE 2026",
+  "distribuidora": "COPEL-DIS",
+  "subgrupo": "B1",
+  "subclasse": "Residencial",
+  "vigencia_inicio": "2026-06-24",
+  "vigencia_fim": "2027-06-23",
+  "unidade": "R$/MWh",
+  "ano_fio_b": 2026,
+  "fio_b_percentual": 0.6,
+  "fio_b_base_legal": "Lei 14.300/2022, art. 27 — incide só sobre energia injetada",
+  "tributos": {
+    "icms_pr": 0.19,
+    "pis_cofins": 0.0925,
+    "observacao": "aproximação; o cálculo real é 'por dentro' e varia por faixa"
+  },
+  "horarios_branca": {
+    "ponta": [
+      18,
+      19,
+      20
+    ],
+    "intermediario": [
+      17,
+      21
+    ]
+  },
+  "modalidades": {
+    "convencional": {
+      "unico": {
+        "te": 310.85,
+        "tusd": 457.17,
+        "fio_b": 214.5356,
+        "te_scee": 30.2
+      }
+    },
+    "branca": {
+      "fora_ponta": {
+        "te": 295.87,
+        "tusd": 338.17,
+        "fio_b": 115.8492,
+        "te_scee": 30.2
+      },
+      "intermediário": {
+        "te": 295.87,
+        "tusd": 617.56,
+        "fio_b": 347.5477,
+        "te_scee": 30.2
+      },
+      "ponta": {
+        "te": 475.67,
+        "tusd": 896.95,
+        "fio_b": 579.2461,
+        "te_scee": 30.2
+      }
+    }
+  }
+}
