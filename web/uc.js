@@ -34,8 +34,13 @@ const UC = (() => {
   // consumir nada. 30 kWh para ligacao monofasica (Res. 1.000/2021).
   const MINIMO_KWH_MES = 30;
 
+  // Mesma versão usada pelo app.js, para o cache invalidar junto.
+  const versao = () =>
+    document.querySelector('meta[name="app-version"]')?.content || "dev";
+  const buscarJson = (url) => fetch(`${url}?v=${encodeURIComponent(versao())}`).then((r) => r.json());
+
   async function carregarTarifas() {
-    if (!tarifas) tarifas = await fetch("data/tarifas.json").then((r) => r.json());
+    if (!tarifas) tarifas = await buscarJson("data/tarifas.json");
     return tarifas;
   }
 
@@ -149,9 +154,7 @@ const UC = (() => {
 
   async function carregarSazonalidade() {
     if (sazonalidade === null) {
-      sazonalidade = await fetch("data/sazonalidade.json")
-        .then((r) => r.json())
-        .catch(() => false);
+      sazonalidade = await buscarJson("data/sazonalidade.json").catch(() => false);
     }
     return sazonalidade;
   }

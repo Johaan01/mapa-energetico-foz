@@ -31,6 +31,16 @@ jobs:
 
       - uses: actions/configure-pages@v5
 
+      # Cache busting: troca __VERSAO__ pelo hash do commit em index.html. Com isso a
+      # URL de cada arquivo muda quando o conteúdo muda — e só então. Sem isto, o
+      # navegador continua servindo a versão anterior por até 10 minutos após o deploy
+      # (é o que faz "abri em aba anônima e funcionou").
+      - name: Carimbar a versão do build
+        run: |
+          sed -i "s/__VERSAO__/${GITHUB_SHA::7}/g" web/index.html
+          echo "Versão carimbada: ${GITHUB_SHA::7}"
+          grep -o 'app-version" content="[^"]*"' web/index.html
+
       - name: Empacotar a pasta web/
         uses: actions/upload-pages-artifact@v3
         with:

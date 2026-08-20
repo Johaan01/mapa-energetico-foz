@@ -82,10 +82,18 @@ const state = {
 const fmt = (n, d = 0) =>
   new Intl.NumberFormat("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
 
-const getJSON = (url) => fetch(url).then((r) => {
-  if (!r.ok) throw new Error(`${url}: ${r.status}`);
-  return r.json();
-});
+/* Versão do build, carimbada pelo workflow de publicação. Anexada a toda requisição
+   de dado para que o navegador busque de novo quando (e só quando) o conteúdo mudar —
+   é o que evita a página velha ficar presa no cache depois de um deploy. */
+const VERSAO = document.querySelector('meta[name="app-version"]')?.content || "dev";
+
+const getJSON = (url) => {
+  const sep = url.includes("?") ? "&" : "?";
+  return fetch(`${url}${sep}v=${encodeURIComponent(VERSAO)}`).then((r) => {
+    if (!r.ok) throw new Error(`${url}: ${r.status}`);
+    return r.json();
+  });
+};
 
 /* ---------- escala de cor ---------- */
 

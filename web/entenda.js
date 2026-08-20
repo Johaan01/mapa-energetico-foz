@@ -10,7 +10,11 @@ const Entenda = (() => {
   const brl = (v) =>
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
-  const buscar = (url) => fetch(url).then((r) => r.json()).catch(() => null);
+  // Versão do build anexada à URL: o cache do navegador invalida junto com o deploy.
+  const versao = () =>
+    document.querySelector('meta[name="app-version"]')?.content || "dev";
+  const buscar = (url) =>
+    fetch(`${url}?v=${encodeURIComponent(versao())}`).then((r) => r.json()).catch(() => null);
 
   /* Tarifa final em R$/kWh: os valores da ANEEL vêm em R$/MWh sem tributo. */
   function porKwh(tarifas, faixa) {

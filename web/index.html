@@ -3,11 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- Versão do build. O workflow de publicação troca __VERSAO__ pelo hash do commit;
+     rodando local, fica "dev" mesmo. Serve para invalidar o cache do navegador: a URL
+     dos arquivos muda quando o conteúdo muda, e só então. -->
+<meta name="app-version" content="__VERSAO__">
+<meta http-equiv="Cache-Control" content="no-cache">
 <title>Rede de Energia — Foz do Iguaçu</title>
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="uc.css">
-<link rel="stylesheet" href="entenda.css">
+<link rel="stylesheet" href="style.css?v=__VERSAO__">
+<link rel="stylesheet" href="uc.css?v=__VERSAO__">
+<link rel="stylesheet" href="entenda.css?v=__VERSAO__">
 </head>
 <body>
 
@@ -286,8 +291,8 @@
 </section>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-<script src="uc.js"></script>
-<script src="entenda.js"></script>
-<script src="app.js"></script>
+<script src="uc.js?v=__VERSAO__"></script>
+<script src="entenda.js?v=__VERSAO__"></script>
+<script src="app.js?v=__VERSAO__"></script>
 </body>
 </html>
