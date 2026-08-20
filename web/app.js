@@ -25,7 +25,11 @@ const COR_SUBESTACAO = {
   converter: "#8a5a1e",
 };
 
-const Z_IMOVEL = 16.5; // a partir daqui aparecem imoveis e ramais
+const Z_IMOVEL = 16.5;       // a partir daqui aparecem imoveis e ramais
+const Z_ENTRA_BAIRRO = 14.2; // aproximar deste ponto carrega o bairro sob o centro
+const Z_SAI_BAIRRO = 13.2;   // afastar abaixo disto volta para a cidade
+                             // (a folga entre os dois evita ficar entrando e saindo
+                             //  em cima do limiar a cada pequeno ajuste de zoom)
 
 /* Niveis de acesso — o dado individual e o eixo da LGPD aqui.
    Imovel a imovel so aparece para a distribuidora (que ja e a detentora do dado) e,
@@ -207,6 +211,14 @@ async function carregarCidade(map) {
   map.on("mouseleave", "cidade-fill", () => (map.getCanvas().style.cursor = ""));
 }
 
+/* Qual bairro está sob o centro da tela. Usa a própria consulta de feições do
+   MapLibre, que já resolve o ponto-em-polígono na camada renderizada. */
+function bairroNoCentro(map) {
+  const centro = map.project(map.getCenter());
+  const achadas = map.queryRenderedFeatures(centro, { layers: ["cidade-fill"] });
+  return achadas.length ? achadas[0].properties.slug : null;
+}
+
 const CAMADAS_CIDADE = ["cidade-fill", "cidade-line", "cidade-trafos"];
 const CAMADAS_BAIRRO = [
   "boundary-fill", "boundary-line", "buildings-fill", "buildings-line",
@@ -217,7 +229,7 @@ const CAMADAS_BAIRRO = [
    leitor não souber quantos kWh isso representa nem a partir de quando é injeção. */
 function atualizarEscala() {
   const cidade = state.modo === "cidade";
-  const max = cidade ? state.escalas.cidadeBairros : state.escalas.buildings;
+  const max = (cidade ? state.escalas.cidadeBairros : state.escalas.buildings) || 1;
   const unidade = cidade ? "kWh no bairro" : "kWh no imóvel";
 
   const titulo = document.getElementById("escala-titulo");
@@ -353,7 +365,7 @@ function voltarParaCidade(map) {
 
 /* ---------- carga do bairro ---------- */
 
-async function carregarBairro(map, slug) {
+async function carregarBairro(map, slug, enquadrarMapa = true) {
   state.slug = slug;
   const base = `data/bairros/${slug}`;
 
@@ -369,11 +381,14 @@ async function carregarBairro(map, slug) {
 
   state.dados = { meta, boundary, feeders, transformers, substation, buildings, ramais };
 
-  state.escalas = {
+  // Mesclar, não substituir: as escalas da cidade são calculadas uma vez só, em
+  // carregarCidade(). Trocar o objeto inteiro aqui as apagava, e a legenda do modo
+  // cidade passava a mostrar "NaN".
+  Object.assign(state.escalas, {
     feeders: escalaDe(feeders.features),
     transformers: escalaDe(transformers.features),
     buildings: escalaDe(buildings.features),
-  };
+  });
 
   for (const nome of ["feeders", "transformers", "buildings", "ramais", "substation"]) {
     aplicarHora(state.dados[nome], state.hora);
@@ -383,7 +398,9 @@ async function carregarBairro(map, slug) {
 
   preencherKpis(meta);
   desenhar(map);
-  enquadrar(map, boundary);
+  // Ao entrar por zoom, manter a câmera onde o usuário a colocou: reenquadrar seria
+  // um salto de tela sem motivo, logo depois de ele ter escolhido para onde olhar.
+  if (enquadrarMapa) enquadrar(map, boundary);
   atualizarHora(state.hora);
 }
 
@@ -636,6 +653,30 @@ function ligarInteracoes(map) {
   map.on("zoom", () => {
     const mostrar = state.modo === "bairro" && map.getZoom() < Z_IMOVEL;
     dica.style.opacity = mostrar ? "1" : "0";
+  });
+
+  /* Entrar no bairro ao aproximar, sair ao afastar. Sem isso o usuário dava zoom na
+     visão de cidade e chegava a um nível onde só via os polígonos gigantes, sem os
+     imóveis — tinha que descobrir sozinho que precisava usar o seletor. Carregamos um
+     bairro por vez, e não os vizinhos: cada um custa alguns MB e a apresentação é no
+     celular. */
+  map.on("moveend", () => {
+    const zoom = map.getZoom();
+
+    if (state.modo === "cidade" && zoom >= Z_ENTRA_BAIRRO) {
+      const slug = bairroNoCentro(map);
+      if (slug && !state.carregando) {
+        state.carregando = true;
+        const sel = document.getElementById("bairro-select");
+        sel.value = slug;
+        carregarBairro(map, slug, false)
+          .then(() => alternarModo(map, "bairro"))
+          .finally(() => { state.carregando = false; });
+      }
+    } else if (state.modo === "bairro" && zoom < Z_SAI_BAIRRO) {
+      document.getElementById("bairro-select").value = "";
+      alternarModo(map, "cidade");
+    }
   });
 }
 
@@ -900,6 +941,7 @@ async function main() {
     attributionControl: false,
   });
   mapRef = map;
+  window.__mapa = map;  // exposto para depuração e para os testes de dev/
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
 
   try {
