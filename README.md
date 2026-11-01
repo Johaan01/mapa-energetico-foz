@@ -5,7 +5,7 @@ comportamento energético de cada bairro sobre uma **rede elétrica plausível, 
 sobre as ruas reais**, mostrando como cada grupo de imóveis pesa sobre a rede ao longo
 das 24 h do dia, com agregação suficiente para respeitar a LGPD.
 
-**Ver o protótipo:** <https://johaan01.github.io/mapa-energetico-foz/>
+**Ver o protótipo:** <https://joaohauch.github.io/mapa-energetico-foz/>
 
 > **Protótipo de hackathon.** Desenvolvido no 1º Hackathon de Transição Energética do
 > Itaipu Parquetec (Tema 3 — Consumidores e prosumidores). Foi construído com dados
@@ -380,7 +380,7 @@ transporte fica bem menos, GeoJSON gzipa muito bem).
 - **Netlify Drop** (`app.netlify.com/drop`) — arrasta a pasta `web/` no navegador e sai
   a URL. Não precisa instalar nada nem ter conta.
 - **GitHub Pages** — o workflow em `.github/workflows/deploy.yml` publica `web/` a cada
-  push na `main`, em <https://johaan01.github.io/mapa-energetico-foz/>. O Pages precisa estar com
+  push na `main`, em <https://joaohauch.github.io/mapa-energetico-foz/>. O Pages precisa estar com
   *GitHub Actions* como origem nas configurações do repositório (já está).
 
 O dashboard é **estático** — nenhum backend. Publicável em GitHub Pages / Netlify, o
