@@ -45,6 +45,20 @@ body { display: flex; flex-direction: column; }
 #title-main { font-size: 16px; font-weight: 700; letter-spacing: 0.2px; }
 #title-sub { font-size: 11px; color: #b7c4cf; }
 
+/* Deixa claro, para quem chega direto pelo link, que isto é um protótipo de hackathon
+   com dados estatísticos. Abre a tela Entenda, que explica o porquê. */
+#selo-prototipo {
+  font-family: var(--font);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #dbe6ef;
+  background: transparent;
+  border: 1px solid var(--olive);
+  padding: 1px 6px;
+  cursor: pointer;
+}
+
 #controles-topo { display: flex; align-items: center; gap: 8px; }
 
 /* Seletor de acesso destacado: é o controle que demonstra a proteção de dados, e

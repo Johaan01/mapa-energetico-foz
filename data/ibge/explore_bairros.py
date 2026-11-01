@@ -3,8 +3,11 @@ procurando Foz do Iguacu / Vila Yolanda, e verifica quais atributos (populacao,
 domicilios) vem junto.
 """
 import geopandas as gpd
+from pathlib import Path
 
-gdf = gpd.read_file(r"C:\Users\joao~\hackathon-transicao-energetica\data\ibge\PR_bairros\PR_bairros_CD2022.shp")
+AQUI = Path(__file__).parent
+
+gdf = gpd.read_file(AQUI / "PR_bairros" / "PR_bairros_CD2022.shp")
 
 print("Colunas:", list(gdf.columns))
 print("Total de bairros no PR:", len(gdf))

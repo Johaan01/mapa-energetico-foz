@@ -1,10 +1,20 @@
-# Plataforma de análise da rede de distribuição — Foz do Iguaçu
+# Mapa energético de Foz do Iguaçu
 
-MVP para o 1º Hackathon de Transição Energética (Tema 3 — Consumidores e prosumidores).
+Plataforma de análise da rede de distribuição de Foz do Iguaçu (PR). Mapeia o
+comportamento energético de cada bairro sobre uma **rede elétrica plausível, traçada
+sobre as ruas reais**, mostrando como cada grupo de imóveis pesa sobre a rede ao longo
+das 24 h do dia, com agregação suficiente para respeitar a LGPD.
 
-Mapeia o comportamento energético de um bairro sobre a **rede elétrica real seguindo as
-ruas**, mostrando como cada grupo de imóveis pesa sobre a rede ao longo das 24 h do dia,
-com agregação suficiente para respeitar a LGPD.
+**Ver o protótipo:** <https://johaan01.github.io/mapa-energetico-foz/>
+
+> **Protótipo de hackathon.** Desenvolvido no 1º Hackathon de Transição Energética do
+> Itaipu Parquetec (Tema 3 — Consumidores e prosumidores). Foi construído com dados
+> públicos e estatísticos (IBGE, ANEEL, OpenStreetMap, NASA POWER), sem acesso a
+> medição individual: as curvas de consumo de cada imóvel, a posição dos
+> transformadores e o traçado da rede são simulados, calibrados por médias oficiais.
+> Não é um produto, não usa dados internos da distribuidora e não serve para decisões
+> sobre a rede real. As [limitações declaradas](#limitações-declaradas) detalham até
+> onde ele vai.
 
 ---
 
@@ -273,7 +283,9 @@ web/
   data/resumo_*.geojson           visão macro da cidade (~1,6 MB)
   data/bairros/<slug>/            camadas por bairro (~2 MB cada)
 data/
-  ibge/  aneel/  gee/             fontes brutas e scripts de exploração
+  recorte/                        recorte das bases da ANEEL usado pelo pipeline
+  ibge/  aneel/  gee/             fontes brutas e scripts da fase de exploração
+                                  (ver data/README.md)
 ```
 
 ### Armadilha do osmnx que custou horas (documentada para não repetir)
@@ -356,7 +368,9 @@ As bases oficiais somam **~1,8 GB** (o CSV de geração distribuída da ANEEL so
 | **Total** | **~1,8 GB** | **7,4 MB** |
 
 O recorte é versionado, então quem clona o projeto consegue rodar o pipeline sem
-rebaixar nada.
+rebaixar nada. O recorte de geração distribuída sai sem as colunas `NumCPFCNPJ` e
+`NomTitularEmpreendimento`: a ANEEL já as publica mascaradas, e o projeto não usa
+nenhuma das duas.
 
 ### Publicar
 
@@ -366,8 +380,8 @@ transporte fica bem menos, GeoJSON gzipa muito bem).
 - **Netlify Drop** (`app.netlify.com/drop`) — arrasta a pasta `web/` no navegador e sai
   a URL. Não precisa instalar nada nem ter conta.
 - **GitHub Pages** — o workflow em `.github/workflows/deploy.yml` publica `web/` a cada
-  push na `main`. Requer `git` instalado (`winget install Git.Git`) e o Pages
-  configurado como *GitHub Actions* nas configurações do repositório.
+  push na `main`, em <https://johaan01.github.io/mapa-energetico-foz/>. O Pages precisa estar com
+  *GitHub Actions* como origem nas configurações do repositório (já está).
 
 O dashboard é **estático** — nenhum backend. Publicável em GitHub Pages / Netlify, o
 que também resolve o acesso pelo celular durante a apresentação.
@@ -401,11 +415,12 @@ entre eles.
 
 O que é medido e o que é construído está detalhado em
 [`docs/AUDITORIA_DADOS.md`](docs/AUDITORIA_DADOS.md), com as validações feitas e as
-respostas para as perguntas prováveis do pitch.
+respostas para as perguntas prováveis da apresentação no hackathon.
 
 ## Limitações declaradas
 
-Registradas de propósito: um jurado técnico vai procurar exatamente por elas.
+Registradas de propósito: um protótipo feito com dados estatísticos só é útil se
+deixar claro onde ele para de valer.
 
 - **Curvas de consumo são sintéticas.** A *média* do conjunto é calibrada no consumo
   real da ANEEL (SAMP/Copel), mas o formato da curva ao longo do dia e a variação entre
@@ -418,14 +433,21 @@ Registradas de propósito: um jurado técnico vai procurar exatamente por elas.
   bairros por falta de granularidade oficial melhor.
 - **Quais casas têm painel solar é sorteio**, ponderado por área — não detecção. A
   tentativa de detectar por visão computacional foi feita e descartada com motivo
-  documentado em `simulation/VISION_DETECTION_NOTES.md`.
+  documentado em [`docs/VISION_DETECTION_NOTES.md`](docs/VISION_DETECTION_NOTES.md).
 - **Cobertura do OSM não é 100 %.** Algumas construções reais não estão mapeadas.
 - **Altura tem ~1,5 m de erro médio** (raster de 4 m), então o número de pavimentos é
   estimativa. Por isso altura nunca exclui um imóvel — só escala o consumo.
 
-## Roadmap apresentável
+## Próximos passos (não implementados)
 
 - Crosswalk CEP ↔ bairro para taxa de adesão por bairro (exige base dos Correios, paga).
 - Detecção de UFV por visão computacional com dataset rotulado real.
 - Ingestão de medição real via ESP32 + CI de metrologia (PZEM-004T / ADE7953), medindo
   potência ativa e fator de potência — não apenas corrente.
+
+## Licença
+
+O código está sob a licença [MIT](LICENSE). Os dados de terceiros seguem as licenças
+das próprias fontes (veja [Fontes de dados](#fontes-de-dados)); em particular, os
+contornos das edificações, as ruas e as subestações vêm do OpenStreetMap
+(© colaboradores do OpenStreetMap, licença ODbL).

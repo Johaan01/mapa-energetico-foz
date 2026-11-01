@@ -23,6 +23,10 @@ DESTINO = RAIZ / "data" / "recorte"
 MUNICIPIO = "Foz do Iguaçu"
 DISTRIBUIDORA = "COPEL-DIS"
 
+# Identificação do titular da usina. A ANEEL já publica as duas mascaradas, mas o
+# projeto não usa nenhuma delas, então ficam fora do recorte.
+COLUNAS_PESSOAIS = {"NumCPFCNPJ", "NomTitularEmpreendimento"}
+
 
 def _mb(p: Path) -> float:
     return p.stat().st_size / 1e6
@@ -41,7 +45,8 @@ def recortar_geracao_distribuida() -> None:
     with origem.open("r", encoding="utf-8", newline="") as fe, \
          destino.open("w", encoding="utf-8", newline="") as fs:
         leitor = csv.DictReader(fe, delimiter=";")
-        escritor = csv.DictWriter(fs, fieldnames=leitor.fieldnames, delimiter=";")
+        campos = [c for c in leitor.fieldnames if c not in COLUNAS_PESSOAIS]
+        escritor = csv.DictWriter(fs, fieldnames=campos, delimiter=";", extrasaction="ignore")
         escritor.writeheader()
         for linha in leitor:
             if linha.get("NomMunicipio") == MUNICIPIO and linha.get("SigUF") == "PR":

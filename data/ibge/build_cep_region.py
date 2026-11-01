@@ -6,6 +6,9 @@ nao por bairro).
 """
 import geopandas as gpd
 import openpyxl
+from pathlib import Path
+
+AQUI = Path(__file__).parent
 
 BAIRROS_NA_ZONA_CEP_85853 = ["Yolanda", "São Roque", "Bourbon", "Remanso", "Mata Verde", "Cataratas"]
 HAB_POR_DOMICILIO_FOZ = 2.82
@@ -13,7 +16,7 @@ REGISTROS_ANEEL_ZONA_85853 = 1364
 
 # --- Populacao real por bairro (Censo 2022) ---
 wb = openpyxl.load_workbook(
-    r"C:\Users\joao~\hackathon-transicao-energetica\data\ibge\Populacao_residente_por_bairros_sexo_idade.xlsx",
+    AQUI / "Populacao_residente_por_bairros_sexo_idade.xlsx",
     read_only=True, data_only=True,
 )
 ws = wb[wb.sheetnames[0]]
@@ -28,7 +31,7 @@ for row in rows:
         pop_por_bairro[nome_bairro] = total
 
 # --- Poligono/area real por bairro (malha IBGE) ---
-gdf = gpd.read_file(r"C:\Users\joao~\hackathon-transicao-energetica\data\ibge\PR_bairros\PR_bairros_CD2022.shp")
+gdf = gpd.read_file(AQUI / "PR_bairros" / "PR_bairros_CD2022.shp")
 foz = gdf[(gdf["NM_MUN"] == "Foz do Iguaçu") & (gdf["NM_BAIRRO"].isin(BAIRROS_NA_ZONA_CEP_85853))]
 
 print(f"{'Bairro':15s} {'Populacao':>10s} {'Area km2':>10s}")
@@ -50,5 +53,5 @@ print(f"Domicilios estimados (pop / {HAB_POR_DOMICILIO_FOZ}): {domicilios_estima
 print(f"Registros ANEEL reais na zona 85853: {REGISTROS_ANEEL_ZONA_85853}")
 print(f"Taxa de adesao da REGIAO (numerador e denominador da mesma geografia): {REGISTROS_ANEEL_ZONA_85853 / domicilios_estimados * 100:.1f}%")
 
-regiao.to_file(r"C:\Users\joao~\hackathon-transicao-energetica\data\ibge\regiao_cep_85853.geojson", driver="GeoJSON")
+regiao.to_file(AQUI / "regiao_cep_85853.geojson", driver="GeoJSON")
 print("\nSalvo: regiao_cep_85853.geojson")

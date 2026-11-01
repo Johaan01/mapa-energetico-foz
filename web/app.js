@@ -1099,6 +1099,7 @@ async function main() {
     document.getElementById("panel").classList.toggle("collapsed")
   );
   document.getElementById("btn-entenda").addEventListener("click", () => Entenda.abrir());
+  document.getElementById("selo-prototipo").addEventListener("click", () => Entenda.abrir());
   document.getElementById("ent-voltar").addEventListener("click", () => Entenda.fechar());
 
   document.getElementById("uc-voltar").addEventListener("click", () => {

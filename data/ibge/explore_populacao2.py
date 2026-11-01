@@ -1,7 +1,10 @@
 import openpyxl
+from pathlib import Path
+
+AQUI = Path(__file__).parent
 
 wb = openpyxl.load_workbook(
-    r"C:\Users\joao~\hackathon-transicao-energetica\data\ibge\Populacao_residente_por_bairros_sexo_idade.xlsx",
+    AQUI / "Populacao_residente_por_bairros_sexo_idade.xlsx",
     read_only=True,
     data_only=True,
 )
